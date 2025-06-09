@@ -1,114 +1,292 @@
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+export default function StudentGrievancePortal() {
+  // Greeting logic
+  const hour = new Date().getHours();
+  let greeting;
+  if (hour < 12) greeting = "Good morning! Welcome to the portal.";
+  else if (hour < 18) greeting = "Good afternoon! Welcome to the portal.";
+  else greeting = "Good evening! Welcome to the portal.";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+  // Form submit handlers
+  function handleLoginSubmit(e) {
+    e.preventDefault();
+    alert("Login successful!");
+    window.location.href = "application.html";
+  }
+  function handleRegisterSubmit(e) {
+    e.preventDefault();
+    alert("Registration successful!");
+    window.location.href = "application.html";
+  }
 
-export default function Home() {
   return (
     <div
-      className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
+      style={{
+        fontFamily: "'Segoe UI', sans-serif",
+        backgroundColor: "#f0f8ff",
+        color: "#333",
+        minHeight: "100vh",
+      }}
     >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+      <header
+        style={{
+          backgroundColor: "#007BFF",
+          color: "white",
+          padding: "20px",
+          textAlign: "center",
+        }}
+      >
+        <h1>Student Grievance Support System</h1>
+        <p id="greeting">{greeting}</p>
+      </header>
+
+      <nav
+        style={{
+          backgroundColor: "#0056b3",
+          display: "flex",
+          justifyContent: "center",
+          gap: "20px",
+          padding: "15px 0",
+          flexWrap: "wrap",
+        }}
+      >
+        <a
+          href="about.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "white", fontWeight: "bold", fontSize: "16px", textDecoration: "none" }}
+        >
+          About
+        </a>
+        <a href="#features" style={{ color: "white", fontWeight: "bold", fontSize: "16px", textDecoration: "none" }}>
+          Features
+        </a>
+        <a href="#login" style={{ color: "white", fontWeight: "bold", fontSize: "16px", textDecoration: "none" }}>
+          Login
+        </a>
+        <a href="#register" style={{ color: "white", fontWeight: "bold", fontSize: "16px", textDecoration: "none" }}>
+          Register
+        </a>
+        <a
+          href="contact.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "white", fontWeight: "bold", fontSize: "16px", textDecoration: "none" }}
+        >
+          Contact
+        </a>
+        <a
+          href="application.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "white", fontWeight: "bold", fontSize: "16px", textDecoration: "none" }}
+        >
+          Apply Now
+        </a>
+      </nav>
+
+      <section
+        id="about"
+        style={{ padding: "40px 20px", maxWidth: 1000, margin: "auto" }}
+      >
+        <h2 style={{ color: "#007BFF", marginBottom: 15, textAlign: "center" }}>
+          About the Portal
+        </h2>
+        <p style={{ fontSize: 16, lineHeight: 1.6, marginBottom: 20 }}>
+          This digital portal is built to empower students to submit their academic or administrative grievances with ease. Complaints are securely routed to the appropriate department for timely resolution.
+        </p>
+        <img
+          src="/student.png"
+          alt="Students"
+          style={{ width: "100%", borderRadius: 10, marginTop: 20 }}
         />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      </section>
+
+      <section id="features" style={{ padding: "40px 20px", maxWidth: 1000, margin: "auto" }}>
+        <h2 style={{ color: "#007BFF", marginBottom: 15, textAlign: "center" }}>Features</h2>
+        <p style={{ fontSize: 16, lineHeight: 1.6, marginBottom: 20 }}>
+          ✔ Real-time grievance tracking
+          <br />
+          ✔ Multi-level complaint routing
+          <br />
+          ✔ Secure and student-friendly design
+        </p>
+      </section>
+
+      <section id="login" style={{ padding: "40px 20px", maxWidth: 500, margin: "auto" }}>
+        <h2 style={{ color: "#007BFF", marginBottom: 15, textAlign: "center" }}>Login</h2>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: 20,
+            borderRadius: 10,
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          <form id="loginForm" onSubmit={handleLoginSubmit}>
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              style={{
+                width: "100%",
+                padding: 10,
+                marginBottom: 15,
+                borderRadius: 5,
+                border: "1px solid #ccc",
+              }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              style={{
+                width: "100%",
+                padding: 10,
+                marginBottom: 15,
+                borderRadius: 5,
+                border: "1px solid #ccc",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#007BFF",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                width: "100%",
+                fontWeight: "bold",
+                borderRadius: 5,
+                cursor: "pointer",
+              }}
+              onMouseOver={e => (e.currentTarget.style.backgroundColor = "#0056b3")}
+              onMouseOut={e => (e.currentTarget.style.backgroundColor = "#007BFF")}
+            >
+              Login
+            </button>
+          </form>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+      </section>
+
+      <section id="register" style={{ padding: "40px 20px", maxWidth: 500, margin: "auto" }}>
+        <h2 style={{ color: "#007BFF", marginBottom: 15, textAlign: "center" }}>Register</h2>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: 20,
+            borderRadius: 10,
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          <form id="registerForm" onSubmit={handleRegisterSubmit}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              required
+              style={{
+                width: "100%",
+                padding: 10,
+                marginBottom: 15,
+                borderRadius: 5,
+                border: "1px solid #ccc",
+              }}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              style={{
+                width: "100%",
+                padding: 10,
+                marginBottom: 15,
+                borderRadius: 5,
+                border: "1px solid #ccc",
+              }}
+            />
+            <input
+              type="password"
+              placeholder="Create Password"
+              required
+              style={{
+                width: "100%",
+                padding: 10,
+                marginBottom: 15,
+                borderRadius: 5,
+                border: "1px solid #ccc",
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#007BFF",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                width: "100%",
+                fontWeight: "bold",
+                borderRadius: 5,
+                cursor: "pointer",
+              }}
+              onMouseOver={e => (e.currentTarget.style.backgroundColor = "#0056b3")}
+              onMouseOut={e => (e.currentTarget.style.backgroundColor = "#007BFF")}
+            >
+              Register
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section
+        id="apply"
+        style={{ textAlign: "center", padding: "40px 20px" }}
+      >
+        <h2 style={{ color: "#007BFF", marginBottom: 15 }}>Ready to Apply?</h2>
+        <p>Submit your student application through our secure form.</p>
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
+          href="application.html"
           target="_blank"
           rel="noopener noreferrer"
+          style={{
+            backgroundColor: "#007BFF",
+            color: "white",
+            padding: "12px 24px",
+            borderRadius: 8,
+            textDecoration: "none",
+            fontWeight: "bold",
+            display: "inline-block",
+            marginTop: 10,
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
+          Go to Application Form
         </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      <section
+        id="contact"
+        style={{ padding: "40px 20px", maxWidth: 1000, margin: "auto" }}
+      >
+        <h2 style={{ color: "#007BFF", marginBottom: 15, textAlign: "center" }}>Contact Us</h2>
+        <p style={{ fontSize: 16, lineHeight: 1.6, marginBottom: 20, textAlign: "center" }}>
+          Email: support@grievance-portal.gov.in
+          <br />
+          Phone: +91-98765-43210
+          <br />
+          Address: Grievance Cell, Govt of Tamil Nadu, Secretariat, Chennai
+        </p>
+      </section>
+
+      <footer
+        style={{
+          backgroundColor: "#007BFF",
+          color: "white",
+          textAlign: "center",
+          padding: 15,
+          marginTop: 40,
+        }}
+      >
+        <p>© 2025 Student Grievance Support System. All Rights Reserved.</p>
       </footer>
     </div>
   );
