@@ -1,8 +1,8 @@
-[3:55 pm, 10/6/2025] Abitha: import React from "react";
+import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Button from "../components/Button";
-import Card from "../components/Card";
+import Button from "../component/Button";
+import Card from "../component/Card";
 
 export default function StudentGrievancePortal() {
   const router = useRouter();

@@ -1,4 +1,4 @@
-// components/Card.js
+// component/Card.js
 import React from 'react';
 
 const Card = ({ title, content }) => {

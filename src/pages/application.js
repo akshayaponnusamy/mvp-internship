@@ -37,26 +37,58 @@ export default function StudentApplicationForm() {
     } else if (course === "B.Sc" || course === "B.Com" || course === "BA") {
       router.push("/grievance-category");
     } else {
-      alert(Application submitted successfully!\nThank you, ${name.trim()}.);
+      alert(`Application submitted successfully!\nThank you, ${name.trim()}.`);
       router.push("/");
     }
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: "0 auto", padding: 20, background: "#fff", borderRadius: 10, boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}>
+    <div
+      style={{
+        maxWidth: 500,
+        margin: "0 auto",
+        padding: 20,
+        background: "#fff",
+        borderRadius: 10,
+        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+      }}
+    >
       <h1 style={{ textAlign: "center" }}>Student Application Form</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Full Name:</label>
-        <input id="name" type="text" value={formData.name} onChange={handleChange} required />
+        <input
+          id="name"
+          type="text"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
 
         <label htmlFor="email">Email:</label>
-        <input id="email" type="email" value={formData.email} onChange={handleChange} required />
+        <input
+          id="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
         <label htmlFor="phone">Phone Number:</label>
-        <input id="phone" type="tel" value={formData.phone} onChange={handleChange} required />
+        <input
+          id="phone"
+          type="tel"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+        />
 
         <label htmlFor="course">Course Applying For:</label>
-        <select id="course" value={formData.course} onChange={handleChange} required>
+        <select
+          id="course"
+          value={formData.course}
+          onChange={handleChange}
+          required
+        >
           <option value="">Select a course</option>
           <option value="B.Tech">B.Tech</option>
           <option value="B.Sc">B.Sc</option>
@@ -66,9 +98,25 @@ export default function StudentApplicationForm() {
         </select>
 
         <label htmlFor="message">Additional Notes (optional):</label>
-        <textarea id="message" rows={4} value={formData.message} onChange={handleChange} />
+        <textarea
+          id="message"
+          rows={4}
+          value={formData.message}
+          onChange={handleChange}
+        />
 
-        <button type="submit" style={{ backgroundColor: "#004080", color: "white", padding: "10px 20px", border: "none", cursor: "pointer", borderRadius: 5, marginTop: 10 }}>
+        <button
+          type="submit"
+          style={{
+            backgroundColor: "#004080",
+            color: "white",
+            padding: "10px 20px",
+            border: "none",
+            cursor: "pointer",
+            borderRadius: 5,
+            marginTop: 10,
+          }}
+        >
           Submit Application
         </button>
       </form>
