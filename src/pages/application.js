@@ -19,7 +19,6 @@ export default function StudentApplicationForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const { name, email, phone, course, message } = formData;
 
     if (!name.trim() || !email.trim() || !phone.trim() || !course) {
@@ -27,20 +26,18 @@ export default function StudentApplicationForm() {
       return;
     }
 
-    // Save data to localStorage
     localStorage.setItem("studentName", name.trim());
     localStorage.setItem("studentEmail", email.trim());
     localStorage.setItem("studentPhone", phone.trim());
     localStorage.setItem("studentCourse", course);
     localStorage.setItem("studentMessage", message.trim());
 
-    // Redirect based on course selection
     if (course === "B.Tech" || course === "B.E") {
       router.push("/specialization");
     } else if (course === "B.Sc" || course === "B.Com" || course === "BA") {
       router.push("/grievance-category");
     } else {
-      alert(`Application submitted successfully!\nThank you, ${name.trim()}.`);
+      alert(Application submitted successfully!\nThank you, ${name.trim()}.);
       router.push("/");
     }
   };

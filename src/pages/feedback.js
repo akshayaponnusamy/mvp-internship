@@ -59,11 +59,13 @@ export default function FeedbackForm() {
       return;
     }
 
+    // Store feedback details in localStorage
     localStorage.setItem("feedbackCategory", category);
     localStorage.setItem("feedbackName", studentName.trim());
     localStorage.setItem("feedbackEmail", studentEmail.trim());
     localStorage.setItem("feedbackDetails", details.trim());
 
+    // ✅ Navigate to thank you page
     router.push("/thankyou");
   };
 
@@ -95,7 +97,6 @@ export default function FeedbackForm() {
         <input
           type="text"
           id="studentName"
-          placeholder="Enter your name"
           value={formData.studentName}
           onChange={handleChange}
           required
@@ -114,7 +115,6 @@ export default function FeedbackForm() {
         <input
           type="email"
           id="studentEmail"
-          placeholder="Enter your email"
           value={formData.studentEmail}
           onChange={handleChange}
           required
@@ -133,7 +133,6 @@ export default function FeedbackForm() {
         <textarea
           id="details"
           rows={5}
-          placeholder="Describe your issue here..."
           value={formData.details}
           onChange={handleChange}
           required

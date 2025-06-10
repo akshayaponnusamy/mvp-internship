@@ -1,4 +1,4 @@
-"use client"; // If using App Router
+"use client"; // Only needed if using the App Router
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -44,10 +44,13 @@ export default function SpecializationSelection() {
       return;
     }
 
+    // Save to localStorage
     localStorage.setItem("finalSpecialization", selectedSpec);
 
     alert(`${student.course} Application Submitted Successfully!\nSpecialization: ${selectedSpec}`);
-    router.push("/grievance-category"); // assuming you have this page
+
+    // ✅ Navigate to grievance-category after specialization is submitted
+    router.push("/grievance-category");
   };
 
   return (
