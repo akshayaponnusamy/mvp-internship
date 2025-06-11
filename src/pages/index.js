@@ -8,22 +8,25 @@ export default function StudentGrievancePortal() {
   const router = useRouter();
 
   const hour = new Date().getHours();
-  let greeting;
-  if (hour < 12) greeting = "Good morning! Welcome to the portal.";
-  else if (hour < 18) greeting = "Good afternoon! Welcome to the portal.";
-  else greeting = "Good evening! Welcome to the portal.";
+  const greeting =
+    hour < 12
+      ? "Good morning! Welcome to the portal."
+      : hour < 18
+      ? "Good afternoon! Welcome to the portal."
+      : "Good evening! Welcome to the portal.";
 
-  function handleLoginSubmit(e) {
+  const handleLoginSubmit = (e) => {
     e.preventDefault();
+    // You can replace this alert with a toast/snackbar
     alert("Login successful!");
     router.push("/application");
-  }
+  };
 
-  function handleRegisterSubmit(e) {
+  const handleRegisterSubmit = (e) => {
     e.preventDefault();
     alert("Registration successful!");
     router.push("/application");
-  }
+  };
 
   return (
     <div
@@ -32,6 +35,8 @@ export default function StudentGrievancePortal() {
         backgroundColor: "#f0f8ff",
         color: "#333",
         minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <header
@@ -70,16 +75,16 @@ export default function StudentGrievancePortal() {
         </Link>
       </nav>
 
-      <section style={{ textAlign: "center", padding: "40px 20px" }}>
+      <main style={{ textAlign: "center", padding: "40px 20px", flex: 1 }}>
         <h2 style={{ color: "#007BFF", marginBottom: 15 }}>Ready to Apply?</h2>
         <p>Submit your student application through our secure form.</p>
 
-        {/* Example usage of Button component */}
-        <Button label="Login" onClick={handleLoginSubmit} />
-        <Button label="Register" onClick={handleRegisterSubmit} />
+        <div style={{ marginTop: 20 }}>
+          <Button label="Login" onClick={handleLoginSubmit} />
+          <Button label="Register" onClick={handleRegisterSubmit} />
+        </div>
 
         <div style={{ marginTop: 40 }}>
-          {/* Example usage of Card component */}
           <Card
             title="Why Submit a Grievance?"
             content="We ensure all student concerns are addressed transparently and promptly."
@@ -89,7 +94,7 @@ export default function StudentGrievancePortal() {
             content="Contact our support team anytime for assistance with your submission."
           />
         </div>
-      </section>
+      </main>
 
       <footer
         style={{
@@ -97,7 +102,6 @@ export default function StudentGrievancePortal() {
           color: "white",
           textAlign: "center",
           padding: 15,
-          marginTop: 40,
         }}
       >
         <p>© 2025 Student Grievance Support System. All Rights Reserved.</p>
