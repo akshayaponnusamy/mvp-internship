@@ -1,51 +1,14 @@
-import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import Button from "../component/Button";
-import Card from "../component/Card";
 
-export default function StudentGrievancePortal() {
-  const router = useRouter();
-
-  const hour = new Date().getHours();
-  let greeting;
-  if (hour < 12) greeting = "Good morning! Welcome to the portal.";
-  else if (hour < 18) greeting = "Good afternoon! Welcome to the portal.";
-  else greeting = "Good evening! Welcome to the portal.";
-
-  function handleLoginSubmit(e) {
-    e.preventDefault();
-    alert("Login successful!");
-    router.push("/application");
-  }
-
-  function handleRegisterSubmit(e) {
-    e.preventDefault();
-    alert("Registration successful!");
-    router.push("/application");
-  }
-
+export default function Home() {
   return (
-    <div
-      style={{
-        fontFamily: "'Segoe UI', sans-serif",
-        backgroundColor: "#f0f8ff",
-        color: "#333",
-        minHeight: "100vh",
-      }}
-    >
-      <header
-        style={{
-          backgroundColor: "#007BFF",
-          color: "white",
-          padding: "20px",
-          textAlign: "center",
-        }}
-      >
+    <div style={{ fontFamily: "Segoe UI, sans-serif", backgroundColor: "#f0f8ff", color: "#333", minHeight: "100vh" }}>
+      <header style={{ backgroundColor: "#007BFF", color: "white", padding: "20px", textAlign: "center" }}>
         <h1>Student Grievance Support System</h1>
-        <p>{greeting}</p>
+        <p>Good morning! Welcome to the portal.</p>
       </header>
 
+      {/* Navigation with added Login and Register */}
       <nav
         style={{
           backgroundColor: "#0056b3",
@@ -56,52 +19,44 @@ export default function StudentGrievancePortal() {
           flexWrap: "wrap",
         }}
       >
-        <Link href="/application" legacyBehavior>
-          <a
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "16px",
-              textDecoration: "none",
-            }}
-          >
-            Apply Now
-          </a>
-        </Link>
+        <Link href="/application" style={navLinkStyle}>Apply Now</Link>
+        <Link href="/login" style={navLinkStyle}>Login</Link>
+        <Link href="/register" style={navLinkStyle}>Register</Link>
       </nav>
 
+      {/* Main Section */}
       <section style={{ textAlign: "center", padding: "40px 20px" }}>
-        <h2 style={{ color: "#007BFF", marginBottom: 15 }}>Ready to Apply?</h2>
+        <h2 style={{ color: "#007BFF", marginBottom: "15px" }}>Ready to Apply?</h2>
         <p>Submit your student application through our secure form.</p>
-
-        {/* Example usage of Button component */}
-        <Button label="Login" onClick={handleLoginSubmit} />
-        <Button label="Register" onClick={handleRegisterSubmit} />
-
-        <div style={{ marginTop: 40 }}>
-          {/* Example usage of Card component */}
-          <Card
-            title="Why Submit a Grievance?"
-            content="We ensure all student concerns are addressed transparently and promptly."
-          />
-          <Card
-            title="Need Help?"
-            content="Contact our support team anytime for assistance with your submission."
-          />
-        </div>
+        <Link
+          href="/application"
+          style={{
+            backgroundColor: "#007BFF",
+            color: "white",
+            padding: "12px 24px",
+            borderRadius: "8px",
+            textDecoration: "none",
+            fontWeight: "bold",
+            display: "inline-block",
+            marginTop: "10px",
+          }}
+        >
+          Go to Application Form
+        </Link>
       </section>
 
-      <footer
-        style={{
-          backgroundColor: "#007BFF",
-          color: "white",
-          textAlign: "center",
-          padding: 15,
-          marginTop: 40,
-        }}
-      >
+      {/* Footer */}
+      <footer style={{ backgroundColor: "#007BFF", color: "white", textAlign: "center", padding: "15px", marginTop: "40px" }}>
         <p>© 2025 Student Grievance Support System. All Rights Reserved.</p>
       </footer>
     </div>
   );
 }
+
+// Reusable style for nav links
+const navLinkStyle = {
+  color: "white",
+  fontWeight: "bold",
+  fontSize: "16px",
+  textDecoration: "none",
+};
