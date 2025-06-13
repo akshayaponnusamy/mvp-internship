@@ -1,10 +1,7 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
 
-export default function StudentApplicationForm() {
-  const router = useRouter();
-
-  const [formData, setFormData] = useState({
+export default function ApplicationForm() {
+  const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
@@ -12,82 +9,91 @@ export default function StudentApplicationForm() {
     message: "",
   });
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [geminiReply, setGeminiReply] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.id]: e.target.value });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, phone, course, message } = formData;
 
-    if (!name.trim() || !email.trim() || !phone.trim() || !course) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+    setLoading(true);
+    setError(null);
+    setGeminiReply(null);
 
-    localStorage.setItem("studentName", name.trim());
-    localStorage.setItem("studentEmail", email.trim());
-    localStorage.setItem("studentPhone", phone.trim());
-    localStorage.setItem("studentCourse", course);
-    localStorage.setItem("studentMessage", message.trim());
+    const prompt = `
+      A student application has been submitted with these details:
+      Name: ${form.name}
+      Email: ${form.email}
+      Phone: ${form.phone}
+      Course: ${form.course}
+      Message: ${form.message || "N/A"}
 
-    if (course === "B.Tech" || course === "B.E") {
-      router.push("/specialization");
-    } else if (course === "B.Sc" || course === "B.Com" || course === "BA") {
-      router.push("/grievance-category");
-    } else {
-      alert(`Application submitted successfully!\nThank you, ${name.trim()}.`);
-      router.push("/");
+      Please respond appropriately.
+    `;
+
+    try {
+      const res = await fetch("/api/askGemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.answer) {
+        setGeminiReply(data.answer);
+        setLoading(false);
+
+        // Show Gemini’s reply for 3 seconds, then redirect to Bard
+        setTimeout(() => {
+          window.location.href = "https://bard.google.com/";
+        }, 3000);
+      } else {
+        setLoading(false);
+        setError(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setLoading(false);
+      setError(err.message || "Server error");
     }
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 500,
-        margin: "0 auto",
-        padding: 20,
-        background: "#fff",
-        borderRadius: 10,
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-      }}
-    >
-      <h1 style={{ textAlign: "center" }}>Student Application Form</h1>
+    <div style={{ maxWidth: 500, margin: "0 auto", padding: 20 }}>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Full Name:</label>
         <input
           id="name"
-          type="text"
-          value={formData.name}
-          onChange={handleChange}
+          placeholder="Name"
           required
+          onChange={handleChange}
+          value={form.name}
         />
-
-        <label htmlFor="email">Email:</label>
+        <br />
         <input
           id="email"
           type="email"
-          value={formData.email}
-          onChange={handleChange}
+          placeholder="Email"
           required
+          onChange={handleChange}
+          value={form.email}
         />
-
-        <label htmlFor="phone">Phone Number:</label>
+        <br />
         <input
           id="phone"
-          type="tel"
-          value={formData.phone}
-          onChange={handleChange}
+          placeholder="Phone"
           required
+          onChange={handleChange}
+          value={form.phone}
         />
-
-        <label htmlFor="course">Course Applying For:</label>
+        <br />
         <select
           id="course"
-          value={formData.course}
-          onChange={handleChange}
           required
+          onChange={handleChange}
+          value={form.course}
         >
           <option value="">Select a course</option>
           <option value="B.Tech">B.Tech</option>
@@ -96,30 +102,41 @@ export default function StudentApplicationForm() {
           <option value="BA">BA</option>
           <option value="B.E">B.E</option>
         </select>
-
-        <label htmlFor="message">Additional Notes (optional):</label>
+        <br />
         <textarea
           id="message"
-          rows={4}
-          value={formData.message}
+          placeholder="Message (optional)"
           onChange={handleChange}
+          value={form.message}
         />
-
-        <button
-          type="submit"
-          style={{
-            backgroundColor: "#004080",
-            color: "white",
-            padding: "10px 20px",
-            border: "none",
-            cursor: "pointer",
-            borderRadius: 5,
-            marginTop: 10,
-          }}
-        >
-          Submit Application
+        <br />
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Submit"}
         </button>
       </form>
+
+      {geminiReply && (
+        <div
+          style={{
+            marginTop: 20,
+            padding: 10,
+            backgroundColor: "#f0f0f0",
+            borderRadius: 4,
+          }}
+        >
+          <h3>Gemini's reply:</h3>
+          <p>{geminiReply}</p>
+          <p style={{ fontStyle: "italic" }}>
+            Redirecting you to the live chat page shortly...
+          </p>
+        </div>
+      )}
+
+      {error && (
+        <div style={{ marginTop: 20, color: "red" }}>
+          <strong>Error:</strong> {error}
+        </div>
+      )}
     </div>
   );
 }
