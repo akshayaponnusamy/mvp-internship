@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 
 export default function ApplicationForm() {
@@ -6,33 +7,34 @@ export default function ApplicationForm() {
     email: "",
     phone: "",
     course: "",
-    message: "",
   });
 
+  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [geminiReply, setGeminiReply] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.id]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
-    setError(null);
-    setGeminiReply(null);
+    setAnswer("");
+    setSubmitted(true);
 
-    const prompt = 
-      A student application has been submitted with these details:
-      Name: ${form.name}
-      Email: ${form.email}
-      Phone: ${form.phone}
-      Course: ${form.course}
-      Message: ${form.message || "N/A"}
-
-      Please respond appropriately.
-    ;
+    const prompt = `
+A student application has been submitted with these details:
+Name: ${form.name}
+Email: ${form.email}
+Phone: ${form.phone}
+Course: ${form.course}
+Please provide personalized feedback or suggestions.
+`;
 
     try {
       const res = await fetch("/api/askGemini", {
@@ -41,102 +43,79 @@ export default function ApplicationForm() {
         body: JSON.stringify({ prompt }),
       });
 
-      const data = await res.json();
+      if (!res.ok || !res.body) {
+        throw new Error("No response body");
+      }
 
-      if (res.ok && data.answer) {
-        setGeminiReply(data.answer);
-        setLoading(false);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
 
-        // Show Gemini’s reply for 3 seconds, then redirect to Bard
-        setTimeout(() => {
-          window.location.href = "https://bard.google.com/";
-        }, 3000);
-      } else {
-        setLoading(false);
-        setError(data.error || "Something went wrong");
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        setAnswer((prev) => prev + chunk);
       }
     } catch (err) {
+      console.error("Gemini API error:", err);
+      setAnswer("Error: Could not fetch response.");
+    } finally {
       setLoading(false);
-      setError(err.message || "Server error");
     }
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: "0 auto", padding: 20 }}>
+    <div style={{ padding: 20 }}>
+      <h1>🎓 Application Form</h1>
       <form onSubmit={handleSubmit}>
         <input
-          id="name"
-          placeholder="Name"
-          required
-          onChange={handleChange}
+          name="name"
+          type="text"
+          placeholder="Enter your name"
           value={form.name}
+          onChange={handleChange}
+          required
         />
         <br />
         <input
-          id="email"
+          name="email"
           type="email"
-          placeholder="Email"
-          required
-          onChange={handleChange}
+          placeholder="Enter your email"
           value={form.email}
+          onChange={handleChange}
+          required
         />
         <br />
         <input
-          id="phone"
-          placeholder="Phone"
-          required
-          onChange={handleChange}
+          name="phone"
+          type="tel"
+          placeholder="Enter your phone number"
           value={form.phone}
+          onChange={handleChange}
+          required
         />
         <br />
-        <select
-          id="course"
-          required
-          onChange={handleChange}
+        <input
+          name="course"
+          type="text"
+          placeholder="Enter your course"
           value={form.course}
-        >
-          <option value="">Select a course</option>
-          <option value="B.Tech">B.Tech</option>
-          <option value="B.Sc">B.Sc</option>
-          <option value="B.Com">B.Com</option>
-          <option value="BA">BA</option>
-          <option value="B.E">B.E</option>
-        </select>
-        <br />
-        <textarea
-          id="message"
-          placeholder="Message (optional)"
           onChange={handleChange}
-          value={form.message}
+          required
         />
         <br />
         <button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Submit"}
+          {loading ? "Submitting..." : "Submit Application"}
         </button>
       </form>
 
-      {geminiReply && (
-        <div
-          style={{
-            marginTop: 20,
-            padding: 10,
-            backgroundColor: "#f0f0f0",
-            borderRadius: 4,
-          }}
-        >
-          <h3>Gemini's reply:</h3>
-          <p>{geminiReply}</p>
-          <p style={{ fontStyle: "italic" }}>
-            Redirecting you to the live chat page shortly...
-          </p>
-        </div>
-      )}
-
-      {error && (
-        <div style={{ marginTop: 20, color: "red" }}>
-          <strong>Error:</strong> {error}
+      {submitted && (
+        <div style={{ marginTop: 20 }}>
+          <h2>🔍 Gemini AI Feedback</h2>
+          {loading && <p>Fetching AI response...</p>}
+          <pre style={{ whiteSpace: "pre-wrap" }}>{answer}</pre>
         </div>
       )}
     </div>
   );
-} 
+}
