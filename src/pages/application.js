@@ -23,7 +23,7 @@ export default function ApplicationForm() {
     setError(null);
     setGeminiReply(null);
 
-    const prompt = `
+    const prompt = 
       A student application has been submitted with these details:
       Name: ${form.name}
       Email: ${form.email}
@@ -32,7 +32,7 @@ export default function ApplicationForm() {
       Message: ${form.message || "N/A"}
 
       Please respond appropriately.
-    `;
+    ;
 
     try {
       const res = await fetch("/api/askGemini", {
@@ -139,4 +139,4 @@ export default function ApplicationForm() {
       )}
     </div>
   );
-}
+} 
