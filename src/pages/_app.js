@@ -1,13 +1,12 @@
-import React from 'react';
-import UploadFile from '../components/UploadFile'; // ✅ Correct path now
+// pages/_app.js
+import '@/styles/style.css'; // Global styles
+import { Analytics } from '@vercel/analytics/react';
 
-function App() {
+export default function App({ Component, pageProps }) {
   return (
-    <div className="App">
-      <h1>Firebase File Upload</h1>
-      <UploadFile />
-    </div>
+    <>
+      <Component {...pageProps} />
+      <Analytics />
+    </>
   );
 }
-
-export default App;
