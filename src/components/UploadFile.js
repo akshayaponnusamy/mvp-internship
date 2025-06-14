@@ -15,24 +15,24 @@ export default function UploadFile() {
     }
 
     try {
-      const docRef = await addDoc(collection(db, "uploads"), {
+      await addDoc(collection(db, "uploads"), {
         studentName,
         department,
         grievance,
         timestamp: serverTimestamp()
       });
-      alert("Grievance submitted! ID: " + docRef.id);
+      alert("✅ Grievance submitted!");
       setStudentName('');
       setDepartment('');
       setGrievance('');
     } catch (error) {
-      console.error("Error uploading:", error);
-      alert("Upload failed: " + error.message);
+      console.error("❌ Upload error:", error);
+      alert("Upload failed.");
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
+    <div style={{ padding: '20px' }}>
       <h2>📁 Upload Student Grievance</h2>
       <input
         type="text"
