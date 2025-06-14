@@ -1,38 +1,22 @@
-// File: src/pages/api/askGemini.js
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   const { prompt } = req.body;
 
-  if (!prompt || typeof prompt !== 'string' || prompt.trim() === '') {
+  if (!prompt) {
     return res.status(400).json({ error: 'Prompt is required' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  // Example: simulate a streaming response
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
 
-  if (!apiKey) {
-    console.error("Missing Gemini API Key");
-    return res.status(500).json({ error: 'Gemini API key not configured' });
+  for (let i = 0; i < prompt.length; i++) {
+    await new Promise((resolve) => setTimeout(resolve, 50)); // simulate delay
+    res.write(prompt[i]);
   }
 
-  try {
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    // generateContent returns a promise resolving to a Generation object
-    const generation = await model.generateContent(prompt);
-
-    // generation.response is a Response object, get text() is async
-    const text = await generation.response.text();
-
-    return res.status(200).json({ answer: text });
-
-  } catch (error) {
-    console.error("Gemini API error:", error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
-  }
+  res.end();
 }

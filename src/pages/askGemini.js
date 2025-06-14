@@ -13,27 +13,35 @@ export default function AskGemini() {
       return;
     }
 
-    console.log('Sending prompt:', prompt); // Debug log
     setLoading(true);
+    setAnswer('');
 
     try {
       const res = await fetch('/api/askGemini', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ prompt }),
       });
 
-      const data = await res.json();
-      setLoading(false);
+      if (!res.ok || !res.body) {
+        throw new Error('Response error or empty body');
+      }
 
-      if (res.ok) {
-        setAnswer(data.answer);
-      } else {
-        setAnswer('Error: ' + (data.error || 'Unknown error'));
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        setAnswer((prev) => prev + chunk);
       }
     } catch (err) {
-      console.error('Error calling API:', err);
+      console.error('Error:', err);
       setAnswer('Error: Failed to fetch response from server');
+    } finally {
       setLoading(false);
     }
   };
@@ -57,7 +65,7 @@ export default function AskGemini() {
       </form>
       <div>
         <h2>Response:</h2>
-        <p>{answer}</p>
+        <pre style={{ whiteSpace: 'pre-wrap' }}>{answer}</pre>
       </div>
     </div>
   );
