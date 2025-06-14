@@ -1,5 +1,6 @@
 // src/components/UploadFile.js
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { db } from '../firebase/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -7,6 +8,7 @@ export default function UploadFile() {
   const [studentName, setStudentName] = useState('');
   const [department, setDepartment] = useState('');
   const [grievance, setGrievance] = useState('');
+  const router = useRouter(); // Initialize router for navigation
 
   const handleSubmit = async () => {
     if (!studentName || !department || !grievance) {
@@ -21,10 +23,11 @@ export default function UploadFile() {
         grievance,
         timestamp: serverTimestamp()
       });
+
       alert("Grievance submitted! ID: " + docRef.id);
-      setStudentName('');
-      setDepartment('');
-      setGrievance('');
+
+      // ✅ Redirect to application page after submission
+      router.push('/application');
     } catch (error) {
       console.error("Error uploading:", error);
       alert("Upload failed: " + error.message);
@@ -32,7 +35,9 @@ export default function UploadFile() {
   };
 
   return (
-    <div>
+    <div style={{ padding: 20 }}>
+      <h2>📁 Upload Student Grievance</h2>
+
       <input
         type="text"
         placeholder="Student Name"
