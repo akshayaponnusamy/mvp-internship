@@ -1,12 +1,22 @@
-// pages/_app.js
-import '@/styles/globals.css';
+// src/App.js
+import React from 'react';
+import UploadFile from './components/UploadFile';
+
+// ✅ 1. Import Vercel Analytics
 import { Analytics } from '@vercel/analytics/react';
 
-export default function App({ Component, pageProps }) {
+function App() {
   return (
-    <>
-      <Component {...pageProps} />
+    <div style={{ padding: 20 }}>
+      <h1>🎓 Student Grievance App</h1>
+
+      {/* ✅ Show the Upload Form */}
+      <UploadFile />
+
+      {/* ✅ Enable Vercel Analytics */}
       <Analytics />
-    </>
+    </div>
   );
 }
+
+export default App;
