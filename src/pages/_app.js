@@ -1,5 +1,13 @@
-import "@/styles/globals.css";
+import React from 'react';
+import UploadFile from '../components/UploadFile'; // ✅ Correct path now
 
-export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+function App() {
+  return (
+    <div className="App">
+      <h1>Firebase File Upload</h1>
+      <UploadFile />
+    </div>
+  );
 }
+
+export default App;
