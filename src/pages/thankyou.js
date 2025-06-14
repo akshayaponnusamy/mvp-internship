@@ -1,43 +1,86 @@
-"use client";
 import { useEffect, useState } from "react";
 
+const images = {
+  "paper-reevaluation": {
+    img: "/paper-reevaluation.png",
+    getMsg: (name) => `Thank you, ${name}. Your feedback on Paper Re-evaluation has been received.`,
+  },
+  "lecture-timetable": {
+    img: "/lecture-timetable.png",
+    getMsg: (name) => `Thanks, ${name}. We’ll look into the Lecture Timetable issue.`,
+  },
+  learning: {
+    img: "/learning.png",
+    getMsg: (name) => `Thank you, ${name}, for your feedback on Learning Resources.`,
+  },
+  finance: {
+    img: "/finance.png",
+    getMsg: (name) => `We appreciate your feedback on Finance-related concerns, ${name}.`,
+  },
+  admission: {
+    img: "/admission.png",
+    getMsg: (name) => `Thank you, ${name}. Your input about Admission has been noted.`,
+  },
+  examination: {
+    img: "/examination.png",
+    getMsg: (name) => `Thanks, ${name}, for your feedback on Examinations.`,
+  },
+};
+
+const fallback = {
+  img: "/default.png",
+  msg: "Thank you for your valuable feedback!",
+};
+
 export default function ThankYou() {
-  const [message, setMessage] = useState("");
-  const [img, setImg] = useState("/default.png");
+  const [message, setMessage] = useState(fallback.msg);
+  const [imgSrc, setImgSrc] = useState(fallback.img);
 
   useEffect(() => {
+    const category = localStorage.getItem("feedbackCategory");
     const name = localStorage.getItem("feedbackName") || "Student";
-    const category = localStorage.getItem("feedbackCategory") || "general";
 
-    const messages = {
-      "paper-reevaluation": `Thanks, ${name}, for your feedback on Paper Re-evaluation.`,
-      "lecture-timetable": `Lecture timetable issue noted, ${name}.`,
-      "learning": `Thanks, ${name}, for your input on Learning Resources.`,
-      "finance": `Thanks for sharing your finance issue, ${name}.`,
-      "admission": `Admission concerns received, ${name}.`,
-      "examination": `We appreciate your examination feedback, ${name}.`,
-    };
-
-    const imgs = {
-      "paper-reevaluation": "/paper-reevaluation.png",
-      "lecture-timetable": "/lecture-timetable.png",
-      "learning": "/learning.png",
-      "finance": "/finance.png",
-      "admission": "/admission.png",
-      "examination": "/examination.png",
-    };
-
-    setMessage(messages[category] || "Thank you for your feedback!");
-    setImg(imgs[category] || "/default.png");
+    if (category && images[category]) {
+      setMessage(images[category].getMsg(name));
+      setImgSrc(images[category].img);
+    } else {
+      setMessage(fallback.msg);
+      setImgSrc(fallback.img);
+    }
   }, []);
 
   return (
-    <div style={{ padding: 20, textAlign: "center" }}>
-      <h1>Thank You!</h1>
-      <p>{message}</p>
-      <img src={img} alt="Thank you" style={{ maxWidth: "300px" }} />
+    <div
+      style={{
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        background: "#f0f8ff",
+        textAlign: "center",
+        padding: 40,
+        minHeight: "100vh",
+      }}
+    >
+      <h1 style={{ color: "#004080", marginBottom: 10 }}>Thank You for Your Feedback!</h1>
+      <h3 style={{ color: "#333", marginBottom: 30 }}>{message}</h3>
+      <img
+        src={imgSrc}
+        alt="Thanks"
+        style={{ maxWidth: "90%", borderRadius: 10, boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}
+      />
       <br />
-      <a href="/">Back to Home</a>
+      <a
+        href="/"
+        style={{
+          display: "inline-block",
+          marginTop: 30,
+          backgroundColor: "#007BFF",
+          color: "white",
+          padding: "12px 20px",
+          textDecoration: "none",
+          borderRadius: 6,
+        }}
+      >
+        Back to Home
+      </a>
     </div>
   );
 }
